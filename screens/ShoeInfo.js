@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal, Image, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const backgroundImage = require('../assets/main.png');
+import shoe3 from '../assets/shoe3.png';
+import shoe4 from '../assets/shoe4.png';
+import shoe5 from '../assets/shoe5.png';
+
+const { width } = Dimensions.get('window'); // Get the screen width
 
 export default function ShoeInfo({ route, navigation }) {
   const { shoe } = route.params;
@@ -65,7 +70,20 @@ export default function ShoeInfo({ route, navigation }) {
           <Text style={styles.shoeDetail}>{shoe.detail}</Text>
         </View>
 
-        {/* Header Title for Size Selection */}
+        {/* Updated Gallery Section */}
+        <Text style={styles.galleryHeader}>Gallery</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.galleryContainer}>
+          <TouchableOpacity onPress={() => console.log('Shoe 3 pressed')}>
+            <Image source={shoe3} style={styles.galleryImage} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log('Shoe 4 pressed')}>
+            <Image source={shoe4} style={styles.galleryImage} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log('Shoe 5 pressed')}>
+            <Image source={shoe5} style={styles.galleryImage} />
+          </TouchableOpacity>
+        </ScrollView>
+
         <Text style={styles.sizeHeader}>Chọn Size:</Text>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sizeContainer}>
@@ -95,10 +113,12 @@ export default function ShoeInfo({ route, navigation }) {
           </View>
         )}
 
-        <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
-          <Text style={styles.addToCartButtonText}>Thêm Vào Giỏ Hàng</Text>
-        </TouchableOpacity>
-
+        <View style={styles.priceContainer}>
+          <Text style={styles.shoePrice}>{shoe.price}</Text>
+          <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
+              <Text style={styles.addToCartButtonText}>Thêm Vào Giỏ Hàng</Text>
+          </TouchableOpacity>
+        </View>
         <Modal
           transparent={true}
           visible={modalVisible}
@@ -124,12 +144,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 5,
+    paddingTop: 10,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 40,
+    marginBottom: 20,
   },
   backButton: {
     backgroundColor: '#87CEFA',
@@ -148,36 +169,36 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     flex: 1,
   },
   shoeImage: {
-    width: 200,
-    height: 200,
+    width: width * 0.5,
+    height: width * 0.5,
     resizeMode: 'contain',
-    marginBottom: 30,
-    marginLeft: 60,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   card: {
     backgroundColor: '#161F28',
-    padding: 10,
+    padding: 15,
     borderRadius: 10,
     marginBottom: 20,
   },
   shoeStatus: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#5B9EE1',
   },
   shoeTitle: {
-    fontSize: 24,
+    fontSize: 20,
     color: '#fff',
     marginBottom: 10,
     fontWeight: 'bold',
   },
   shoePrice: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#fff',
     marginBottom: 10,
   },
@@ -185,18 +206,33 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#ccc',
   },
-  sizeHeader: {
+  galleryHeader: {
     color: '#fff',
     fontSize: 18,
+    marginBottom: 10,
+  },
+  galleryContainer: {
+    marginBottom: 20,
+  },
+  galleryImage: {
+    width: width * 0.2,
+    height: width * 0.1,
+    resizeMode: 'cover',
+    marginRight: 10,
+    borderRadius: 5,
+  },
+  sizeHeader: {
+    color: '#fff',
+    fontSize: 16,
     marginBottom: 10,
   },
   sizeContainer: {
     marginBottom: 20,
   },
   sizeButton: {
-    width: 50, 
-    height: 50, 
-    borderRadius: 25, 
+    width: 40,
+    height: 40,
+    borderRadius: 25,
     backgroundColor: '#333',
     justifyContent: 'center',
     alignItems: 'center',
@@ -226,44 +262,61 @@ const styles = StyleSheet.create({
   },
   controlButton: {
     backgroundColor: '#87CEFA',
-    borderRadius: 10,
-    padding: 5,
+    padding: 10,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   quantity: {
     color: '#fff',
-    marginHorizontal: 10,
     fontSize: 16,
+    marginHorizontal: 10,
   },
-  addToCartButton: {
-    backgroundColor: '#87CEFA',
-    padding: 15,
-    borderRadius: 10,
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 'auto',
+    marginVertical: 10,
+    backgroundColor: '#161F28',
+    padding: 10,
+    borderRadius: 10,
   },
-  addToCartButtonText: {
+  shoePrice: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  modalOverlay: {
-    flex: 1,
+  addToCartButton: {
+    backgroundColor: '#87CEFA',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  addToCartButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContainer: {
-    width: '80%',
     backgroundColor: '#fff',
-    borderRadius: 10,
     padding: 20,
+    borderRadius: 10,
     alignItems: 'center',
   },
   checkmarkIcon: {
-    marginBottom: 15,
+    marginBottom: 10,
   },
   modalMessage: {
-    fontSize: 16,
-    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });
